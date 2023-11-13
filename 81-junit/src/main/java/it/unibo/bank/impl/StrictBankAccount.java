@@ -32,7 +32,7 @@ public class StrictBankAccount extends SimpleBankAccount {
     }
 
     protected boolean isWithdrawAllowed(final double amount) {
-        return (amount > 0 && getBalance() > amount);
+        return amount > 0 && getBalance() > amount;
     }
 
 }

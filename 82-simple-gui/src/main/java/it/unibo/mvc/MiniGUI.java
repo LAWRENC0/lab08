@@ -42,6 +42,7 @@ public class MiniGUI {
                 System.out.println(randomGenerator.nextInt());
             }
         });
+        
     }
 
     private void display() {
