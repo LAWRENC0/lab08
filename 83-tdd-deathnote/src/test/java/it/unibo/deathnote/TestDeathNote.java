@@ -43,8 +43,8 @@ class TestDeathNote {
 
     @Test
     public void testIsNameWritten() {
-        String humanName1 = "Paolo Verdi";
-        String humanName2 = "Marco Verdi";
+        final String humanName1 = "Paolo Verdi";
+        final String humanName2 = "Marco Verdi";
         Assertions.assertFalse(this.myDeathNote.isNameWritten(humanName1));
         this.myDeathNote.writeName(humanName1);
         Assertions.assertTrue(this.myDeathNote.isNameWritten(humanName1));
@@ -62,13 +62,41 @@ class TestDeathNote {
             Assertions.assertNotNull(e.getMessage());
             Assertions.assertNotEquals("", e.getMessage().trim());
         }
-        String humanName1 = "Paolo Bonolis";
-        String humanName2 = "Carlo Conti";
+        final String humanName1 = "Paolo Bonolis";
+        final String humanName2 = "Carlo Conti";
         this.myDeathNote.writeName(humanName1);
         Assertions.assertEquals("heart attack", this.myDeathNote.getDeathCause(humanName1));
-        this.myDeathNote.writeName(humanName1);
-
+        this.myDeathNote.writeName(humanName2);
+        final String deathCause = "karting accident";
+        boolean retValue = this.myDeathNote.writeDeathCause(deathCause);
+        Assertions.assertTrue(retValue);
+        Assertions.assertEquals(deathCause, this.myDeathNote.getDeathCause(humanName2));
+        Thread.sleep(100);
+        retValue = this.myDeathNote.writeDeathCause(deathCause);
+        Assertions.assertFalse(retValue);
     }
 
+    @Test
+    public void testWriteDetails() throws InterruptedException {
+        try {
+            this.myDeathNote.writeDetails("sbatte il mignolo contro lo spigolo");
+            fail();
+        } catch (IllegalStateException e) {
+            
+        }
+        final String humanName1 = "Gerry Scotty";
+        this.myDeathNote.writeName(humanName1);
+        Assertions.assertEquals("", this.myDeathNote.getDeathDetails(humanName1));
+        final boolean b1 = this.myDeathNote.writeDetails("ran for too long");
+        Assertions.assertTrue(b1);
+        Assertions.assertEquals(this.myDeathNote.getDeathDetails(humanName1), "ran for too long");
+        final String humanName2 = "Rudy Zerby";
+        this.myDeathNote.writeName(humanName2);
+        final String details = this.myDeathNote.getDeathDetails(humanName2);
+        Thread.sleep(6100);
+        final boolean b2 = this.myDeathNote.writeDetails(humanName2);
+        Assertions.assertFalse(b2);
+        Assertions.assertEquals(this.myDeathNote.getDeathDetails(humanName2), details);
+    }
 
 }
